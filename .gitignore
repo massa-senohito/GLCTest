@@ -1,0 +1,13 @@
+*~
+*.swp
+*.swo
+*.sdf
+*.suo
+*.png
+*.unity*
+*.mat
+*.bmp
+bin/
+obj/
+Debug/
+ipch/
