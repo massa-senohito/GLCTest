@@ -4,6 +4,7 @@
 *.sdf
 *.suo
 *.png
+*.opensdf
 *.unity*
 *.mat
 *.bmp
