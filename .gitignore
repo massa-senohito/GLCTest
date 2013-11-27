@@ -8,7 +8,10 @@
 *.unity*
 *.mat
 *.bmp
+*.gch
 bin/
 obj/
 Debug/
 ipch/
+CMakeLists.*
+*.cgfx

@@ -1,9 +1,10 @@
 // GLCTest.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
-//
+// bulletが2010プロフィールでビルドしてるのでこれも2010で、他のライブラリも2010ビルドで
 
 #include "stdafx.h"
 #include "ExportDLL.h"
 #include "GUIUtil.h"
+#include "CgLoader.h"
 extern "C"{
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -21,9 +22,10 @@ public:
         float WalkBias;//縦揺れ用バイアス値
         float weight;
         //コンストラクタ
-        WalkInfo():HeadAngle(0),PosX(0),PosY(0),PosZ(0),WalkBias(0),weight(0.05){}
+        WalkInfo():HeadAngle(0),PosX(0),PosY(0),PosZ(0),WalkBias(0),weight(0.05f){}
 
 };
+
 
 
 bool quit=false;
@@ -51,7 +53,7 @@ void CheckKeyStatus();
 void joyStick(unsigned int,int,int,int);
 //--------- 各種外部変数 ---------//
 WalkInfo CurrentPos;
-const float PI_OVER_180 = 0.0174532925;
+const float PI_OVER_180 = 0.0174532925f;
 bool key_status[256];//キーの状態
 float floormat[16];
 float boxmat[16];
@@ -65,7 +67,7 @@ void GLUT_CALL_FUNCs()
         glutSpecialUpFunc(SpecialKeyUp); //キーを離した時の処理
         glutJoystickFunc(joyStick,10);
 }
-float ey=0.9,ez=1.2,ex=0;
+float ey=0.9f,ez=1.2f,ex=0.f;
 void joyStick(unsigned int button,int x,int y,int z){
     //printf_s("bu=%d\n",button);
     //printf("ey=%d\nez=%d",ey,ez);
@@ -89,7 +91,7 @@ void MyOtherGLInit()
 {
         glClearColor(1.0, 1.0, 1.0, 1.0);
         glEnable(GL_DEPTH_TEST);
-	
+        glEnable(GL_BLEND);
         //材質はglColorで設定する
         glColorMaterial(GL_FRONT,GL_AMBIENT_AND_DIFFUSE);
         glEnable(GL_COLOR_MATERIAL);
@@ -122,7 +124,10 @@ void GLUT_INITs(int *argcp,char**argvp)
 }
 
 
+#include "TempleteUtil.h"
 
+#include "ImageLoader.hpp"
+CgLoader lo=CgLoader("vtrans.cgo",Shader::VertexObj);
 //------------- メイン関数 ------------//
 int main(int argc ,char **argv)
 {
@@ -137,20 +142,80 @@ int main(int argc ,char **argv)
         0,0,0,1
     };
     g->addRot(roy);
+    //auto il=ImageLoader();
     glutMainLoop();
     delete g;
+
     return 0;
 }
+void WindowUI(float width,float height){
+    //- -
+    //- +
+    //+ +
+    //+ -
+#if _DEBUG
 
+    bool e=lo.IsError();
+#endif
+    //lo.BindEnable([width,height](){
+      //glRotatef(90.f,1.f,0.f,0.f);
+      auto he=height/3;
+      auto uipos=-2.5666f;
+      glDepthMask(GL_FALSE);
+      glColor4f(0.8f,0.0f,0.8f,0.5);//pink
+      glTranslatef(0,-he,uipos);
+      glRectf(-width,-height/3,width,height/3);
+      //printf_s("%f\n",ez);
+      glColor4f(0.2f,1.f,0.4f,0.5);//glee
+      glTranslatef(0,he,0);
+      glRectf(-width,-height/3,width,height/3);
+
+      glDepthMask(GL_TRUE);
+      glColor3f(0.f,0.0f,0.8f);//blue
+      glTranslatef(0,he,0);
+      glRectf(-width,-height/3,width,height/3);
+    //});
+    //glBlendFunc or Cgで半透明
+}
+void blendTest(){
+    //if(ez> 1){glBlendFunc(GL_SRC_ONE, GL_ZERO);}
+    // 通常転送（αあり）
+    // つまりαブレンドのこと
+    if(ez>2 ){glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);}
+    // dst 反転
+    if(ez> 3){glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);} // src = 1 固定}
+    // 加算（αなし）
+    if(ez> 4){glBlendFunc(GL_ONE, GL_ONE);}
+    // 加算（αあり）
+    if(ez> 5){glBlendFunc(GL_SRC_ALPHA, GL_ONE);}
+    if(ez> 6){glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);} // src = 1 固定}
+    if(ez> 7){glBlendFunc(GL_ONE, GL_ONE);}
+    if(ez> 8){glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);} // src = 1 固定}
+    if(ez> 9){glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);} // src = 1 固定}
+    if(ez> 10){glBlendFunc(GL_SRC_ALPHA, GL_ONE);}
+    if(ez> 11){glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ZERO);} // src = 1 固定}
+    // 乗算（αなし）
+    if(ez> 12){glBlendFunc(GL_ZERO, GL_SRC_COLOR);}
+    // 乗算（αあり）
+    // α値が小さくなればなるほど真っ黒になるので、
+    // むしろαなしと言えるのかもしれない
+    if(ez> 13){glBlendFunc(GL_ZERO, GL_SRC_COLOR);}
+    if(ez> 14){glBlendFunc(GL_ZERO, GL_SRC_ALPHA);}
+    // スクリーン（αなし）
+    if(ez> 15){glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);}
+    // 除外（αなし）
+    if(ez> 16){glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);}
+    }
 //------------- ここから各種コールバック --------------//
 void display()
 {
         static float LightPos[]= {10,10,10,0};
-
+        blendTest();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glLoadIdentity();
-
+	//これどうしてglMatrixMode変えてないんだろ
         glPushMatrix();
+        WindowUI(0.8f,0.8f);
         //glRotatef(360 - CurrentPos.HeadAngle,0,1.0,0);
         //glTranslatef(-CurrentPos.PosX, -CurrentPos.PosY - 0.25, -CurrentPos.PosZ);
         gluLookAt(CurrentPos.PosX,CurrentPos.PosY+6+ey,CurrentPos.PosZ+2+ez,
@@ -225,7 +290,7 @@ void timer(int value)
     count++;
     glutPostRedisplay();
     auto c=ObjectCount();
-    if(count%10==0)    
+    if(count%1==0)    
         Step();
     if(quit){
 	Exit();
@@ -312,9 +377,9 @@ void CheckKeyStatus()
                 CurrentPos.WalkBias += 10;
                 if (CurrentPos.WalkBias >= 359.0f)
                 {
-                        CurrentPos.WalkBias = 0.0;
+                        CurrentPos.WalkBias = 0.0f;
                 }
-                CurrentPos.PosY= sin(CurrentPos.WalkBias*PI_OVER_180) / 20.0;
+                CurrentPos.PosY= sin(CurrentPos.WalkBias*PI_OVER_180) / 20.0f;
         }
 
         if(key_status[GLUT_KEY_DOWN] == true)
@@ -322,15 +387,15 @@ void CheckKeyStatus()
                 CurrentPos.PosX += sin(CurrentPos.HeadAngle * PI_OVER_180) * CurrentPos.weight;
                 CurrentPos.PosZ += cos(CurrentPos.HeadAngle * PI_OVER_180) * CurrentPos.weight;
 
-                CurrentPos.WalkBias -= 10;
+                CurrentPos.WalkBias -= 10.f;
                 if(CurrentPos.WalkBias <= 1.0)
                 {
-                        CurrentPos.WalkBias = 359.0;
+                        CurrentPos.WalkBias = 359.0f;
                 }
-                CurrentPos.PosY= sin(CurrentPos.WalkBias*PI_OVER_180) / 20.0;
+                CurrentPos.PosY= sin(CurrentPos.WalkBias*PI_OVER_180) / 20.0f;
         }
 
-	float xr=0.1;
+	float xr=0.1f;
         if(key_status[GLUT_KEY_RIGHT] == true)
         {
                 //CurrentPos.HeadAngle -= 2;

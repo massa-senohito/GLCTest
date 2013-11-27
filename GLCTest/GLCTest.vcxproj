@@ -52,13 +52,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\BulletRapper;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\include;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\Extras\glui\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\..\include;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\BulletRapper;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\include;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\Extras\glui\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\lib\Debug;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\lib\x86\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Downloads\glui-2.36\src\msvc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>BulletRapper.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;glui32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\..\lib;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\lib\Debug;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\lib\x86\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Downloads\glui-2.36\src\msvc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>BulletRapper.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;glui32.lib;CgGLRap.lib;cg.lib;cgGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,18 +84,36 @@
   <ItemGroup>
     <ClInclude Include="GLCTest.h" />
     <ClInclude Include="GUIUtil.h" />
-    <ClInclude Include="ImageLoader.h" />
+    <ClInclude Include="ImageLoader.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TempleteUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLCTest.cpp" />
     <ClCompile Include="GUIUtil.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
+    <ClCompile Include="SceneUtil.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TempleteUtil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EdimonUtil\EdimonUtil.fsproj">
+      <Project>{6d8cd8ae-525f-4591-b94f-8749621a5da5}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bumpdemo.cgfx">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
