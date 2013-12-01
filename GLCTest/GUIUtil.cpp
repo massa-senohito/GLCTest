@@ -1,9 +1,9 @@
 #include "StdAfx.h"
 #include "GUIUtil.h"
 #include "glui.h"
-
 void updatecb(int num){
     //ƒRƒ“ƒgƒ[ƒ‹‚Ìid‚ª‚©‚¦‚é
+    
 }
 
 GUIUtil::GUIUtil(void):cb(new GLUI_CB(updatecb)),count(0)

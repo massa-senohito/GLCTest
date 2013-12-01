@@ -14,7 +14,7 @@ let libdest= @"C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\GLCTe
 let libsrc = @"C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\CgGLRap\Debug\"
 let hdsrc  = @"C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\CgGLRap\CgGLRap\"
 let hddest = @"C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\GLCTest\include\"
-
+//glewいれてcgの様子を見たい
 let slsrc  = @"C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\GLCTest\GLCTest\"
 let sldest = @"C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\GLCTest\Debug\"
 let toFile =Seq.map File

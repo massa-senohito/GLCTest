@@ -52,12 +52,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\..\include;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\BulletRapper;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\include;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\Extras\glui\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)\..\include;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\include;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\Extras\glui\GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\..\lib;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\bullet-2.81-rev2613\lib\Debug;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\lib\x86\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Downloads\glui-2.36\src\msvc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\..\lib;C:\Users\massa_senohito\Downloads\freeglut-2.8.1\lib\x86\Debug;C:\Users\massa_senohito\Documents\Visual Studio 11\Projects\BulletRapper\Debug;C:\Users\massa_senohito\Downloads\glui-2.36\src\msvc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>BulletRapper.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;glui32.lib;CgGLRap.lib;cg.lib;cgGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

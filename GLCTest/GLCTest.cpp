@@ -68,10 +68,10 @@ void GLUT_CALL_FUNCs()
         glutJoystickFunc(joyStick,10);
 }
 float ey=0.9f,ez=1.2f,ex=0.f;
+bool toggleWindow=true;
 void joyStick(unsigned int button,int x,int y,int z){
     //printf_s("bu=%d\n",button);
     //printf("ey=%d\nez=%d",ey,ez);
-
     if(x==left){  ;}
     if(y==down) { ey-=0.1f;}
     if(y==-down){ ey+=0.1f;}
@@ -81,9 +81,9 @@ void joyStick(unsigned int button,int x,int y,int z){
     //if(button & 1<<1){ex=1;}else{ex=0;}
     //if(button & 1<<2){ez=1;}else{ez=0;}
 
-    printf_s("x=%d",x);
-    printf_s("y=%d",y);
-    printf_s("z=%d\n",z);
+    //printf_s("x=%d",x);
+    //printf_s("y=%d",y);
+    //printf_s("z=%d\n",z);
 
 }
 
@@ -109,11 +109,17 @@ Vector3 vec3(float x,float y,float z){
 
 void GLUT_INITs(int *argcp,char**argvp)
 {
+
     glutInit(argcp,argvp);
     glutInitDisplayMode(GLUT_RGBA| GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(640,480);
     glutCreateWindow("Basic Walking Around without KeyRepeat");
-    
+    //glsl使えるようにwgl呼んだらいけるかも
+  //  std::cout << "Vendor :"<<glGetString(GL_VENDOR)<<'\n';
+  //std::cout << "GPU : "<<glGetString(GL_RENDERER) <<'\n';
+  //std::cout << "OpenGL ver. " <<glGetString(GL_VERSION)<<'\n';
+  //std::cout << "【拡張機能一覧】"<<std::endl;
+    std::cout << glGetString(GL_EXTENSIONS) <<std::endl;
     Init(-9);
     MakeSpere(0,7,0,false);
     MakeBox(vec3(0,2,0),2,false,boxmat);
@@ -127,7 +133,7 @@ void GLUT_INITs(int *argcp,char**argvp)
 #include "TempleteUtil.h"
 
 #include "ImageLoader.hpp"
-CgLoader lo=CgLoader("vtrans.cgo",Shader::VertexObj);
+CgLoader lo=CgLoader("vtrans.cgo",VertexObj);
 //------------- メイン関数 ------------//
 int main(int argc ,char **argv)
 {
@@ -158,24 +164,24 @@ void WindowUI(float width,float height){
     bool e=lo.IsError();
 #endif
     //lo.BindEnable([width,height](){
-      //glRotatef(90.f,1.f,0.f,0.f);
-      auto he=height/3;
+      auto he=height/2;
       auto uipos=-2.5666f;
+      auto cpos=0.0f;//-0.5~0.5が適任
+      glPushMatrix();
       glDepthMask(GL_FALSE);
-      glColor4f(0.8f,0.0f,0.8f,0.5);//pink
-      glTranslatef(0,-he,uipos);
-      glRectf(-width,-height/3,width,height/3);
+      glColor4f(0.0f,0.0f,0.7f,0.4f);//blue
+      glTranslatef(0,0,uipos);
+      glRectf(-width,-height,width,height);
       //printf_s("%f\n",ez);
-      glColor4f(0.2f,1.f,0.4f,0.5);//glee
-      glTranslatef(0,he,0);
-      glRectf(-width,-height/3,width,height/3);
+      glColor4f(0.2f,1.f,0.4f,0.4f);//glee
+      glTranslatef(0.0f,cpos,0.1f);
+      glRectf(-width,-0.1f,width,0.1f);
+      
 
       glDepthMask(GL_TRUE);
-      glColor3f(0.f,0.0f,0.8f);//blue
-      glTranslatef(0,he,0);
-      glRectf(-width,-height/3,width,height/3);
+      glPopMatrix();
     //});
-    //glBlendFunc or Cgで半透明
+
 }
 void blendTest(){
     //if(ez> 1){glBlendFunc(GL_SRC_ONE, GL_ZERO);}
@@ -209,27 +215,28 @@ void blendTest(){
 //------------- ここから各種コールバック --------------//
 void display()
 {
-        static float LightPos[]= {10,10,10,0};
-        blendTest();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //glLoadIdentity();
-	//これどうしてglMatrixMode変えてないんだろ
-        glPushMatrix();
-        WindowUI(0.8f,0.8f);
-        //glRotatef(360 - CurrentPos.HeadAngle,0,1.0,0);
-        //glTranslatef(-CurrentPos.PosX, -CurrentPos.PosY - 0.25, -CurrentPos.PosZ);
-        gluLookAt(CurrentPos.PosX,CurrentPos.PosY+6+ey,CurrentPos.PosZ+2+ez,
-            CurrentPos.PosX,CurrentPos.PosY,CurrentPos.PosZ,
-	    0,0,-1);
-        glLightfv(GL_LIGHT0, GL_POSITION, LightPos);
+    static float LightPos[]= {10,10,10,0};
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glLoadIdentity();
+    //glMatrixModeはMODELVIEW行列にしている
+    glPushMatrix();
+    if(toggleWindow){
+        WindowUI(0.8f,0.8f);}
+    //glRotatef(360 - CurrentPos.HeadAngle,0,1.0,0);
+    //glTranslatef(-CurrentPos.PosX, -CurrentPos.PosY - 0.25, -CurrentPos.PosZ);
+    gluLookAt(CurrentPos.PosX,CurrentPos.PosY+6+ey,CurrentPos.PosZ+2+ez,
+        CurrentPos.PosX,CurrentPos.PosY,CurrentPos.PosZ,
+        0,0,-1);
+    glLightfv(GL_LIGHT0, GL_POSITION, LightPos);
 
-        DrawXYZ();
+    DrawXYZ();
 
-        DrawField();
-        glPopMatrix();
+    DrawField();
+    glPopMatrix();
 
-        glutSwapBuffers();
-        CheckKeyStatus();
+    glutSwapBuffers();
+    CheckKeyStatus();
 
 }
 
@@ -263,9 +270,13 @@ void specialkey(int key, int x, int y)
                 case GLUT_KEY_LEFT:
                         key_status[key] = true;
                 break;
+                case GLUT_KEY_ALT_L:
+                    toggleWindow = !toggleWindow;
+		    break;
                 case GLUT_KEY_SHIFT_L:
                     quit=true;
-                default: //ESCないらしいしゅーん
+		    break;
+                default: //ESCないらしい
                 break;
         }
 }
@@ -333,7 +344,7 @@ void DrawField()
     glPopMatrix();
  
     glPushMatrix();
-    Render();
+    //Render();
     glPopMatrix();
     
     glPushMatrix();
