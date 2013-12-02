@@ -7,14 +7,17 @@
 
 #include "targetver.h"
 
-#include "glcorearb.h"
+//#include "glcorearb.h"
+#include "GL\glew.h"
+#include "GL\glut.h"
+#include "GL\glext.h"
+#include "GL\freeglut.h"
 #include "GL\glut.h"
 #include "GL\freeglut.h"
 #include <math.h>
 #include <stdio.h>
 #include <tchar.h>
 #include <iostream>
-#include "GL\glext.h"
 
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照してください。

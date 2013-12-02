@@ -5,6 +5,7 @@
 #include "ExportDLL.h"
 #include "GUIUtil.h"
 #include "CgLoader.h"
+#  pragma comment(lib, "glew32.lib")
 extern "C"{
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -86,19 +87,31 @@ void joyStick(unsigned int button,int x,int y,int z){
     //printf_s("z=%d\n",z);
 
 }
-
+CgLoader* lo;
 void MyOtherGLInit()
 {
-        glClearColor(1.0, 1.0, 1.0, 1.0);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        //材質はglColorで設定する
-        glColorMaterial(GL_FRONT,GL_AMBIENT_AND_DIFFUSE);
-        glEnable(GL_COLOR_MATERIAL);
-	
-        glEnable(GL_LIGHT0);
-        glEnable(GL_LIGHTING);
-        glutIgnoreKeyRepeat(GL_TRUE); //リピートを無視
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+#if defined(WIN32)
+    /* GLEW の初期化 */
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        exit(1);
+    }
+    if(GLEW_ARB_point_parameters){
+        ;
+    }
+#endif
+    lo =new CgLoader("vtrans.cgo",VertexObj);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    //材質はglColorで設定する
+    glColorMaterial(GL_FRONT,GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHTING);
+    glutIgnoreKeyRepeat(GL_TRUE); //リピートを無視
 }
 
 Vector3 vec3(float x,float y,float z){
@@ -133,7 +146,6 @@ void GLUT_INITs(int *argcp,char**argvp)
 #include "TempleteUtil.h"
 
 #include "ImageLoader.hpp"
-CgLoader lo=CgLoader("vtrans.cgo",VertexObj);
 //------------- メイン関数 ------------//
 int main(int argc ,char **argv)
 {
@@ -161,7 +173,7 @@ void WindowUI(float width,float height){
     //+ -
 #if _DEBUG
 
-    bool e=lo.IsError();
+    bool e=lo->IsError();
 #endif
     //lo.BindEnable([width,height](){
       auto he=height/2;
@@ -255,8 +267,8 @@ void reshape(int w, int h)
 }
 
 void Exit(){
-    //delete floormat;
     Quit();
+    delete lo;
         glutExit();
 }
 //---  特殊キーによる制御  ----//
