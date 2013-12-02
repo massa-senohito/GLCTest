@@ -12,8 +12,6 @@
 #include "GL\glut.h"
 #include "GL\glext.h"
 #include "GL\freeglut.h"
-#include "GL\glut.h"
-#include "GL\freeglut.h"
 #include <math.h>
 #include <stdio.h>
 #include <tchar.h>

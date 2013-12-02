@@ -1,5 +1,5 @@
 #pragma once
-#include "glui.h"
+#include "GL/glui.h"
 class GUIUtil
 {
     GLUI *glui;

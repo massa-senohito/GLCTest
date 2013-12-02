@@ -356,7 +356,7 @@ void DrawField()
     glPopMatrix();
  
     glPushMatrix();
-    //Render();
+    Render();
     glPopMatrix();
     
     glPushMatrix();
