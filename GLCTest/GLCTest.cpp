@@ -2,11 +2,11 @@
 // bulletが2010プロフィールでビルドしてるのでこれも2010で、他のライブラリも2010ビルドで
 
 #include "stdafx.h"
+#include "GLCTest.h"
 #include "ExportDLL.h"
 #include "GUIUtil.h"
 #include "CgLoader.h"
 #  pragma comment(lib, "glew32.lib")
-extern "C"{
 int _tmain(int argc, _TCHAR* argv[])
 {
     
@@ -59,15 +59,7 @@ bool key_status[256];//キーの状態
 float floormat[16];
 float boxmat[16];
 //---------- OpenGLの初期設定 ------------//
-void GLUT_CALL_FUNCs()
-{
-        glutDisplayFunc(display);
-        glutReshapeFunc(reshape);
-        glutTimerFunc(0,timer,17);
-        glutSpecialFunc(specialkey);
-        glutSpecialUpFunc(SpecialKeyUp); //キーを離した時の処理
-        glutJoystickFunc(joyStick,10);
-}
+
 float ey=0.9f,ez=1.2f,ex=0.f;
 bool toggleWindow=true;
 void joyStick(unsigned int button,int x,int y,int z){
@@ -141,7 +133,15 @@ void GLUT_INITs(int *argcp,char**argvp)
     GLUT_CALL_FUNCs();
     MyOtherGLInit();
 }
-
+void GLUT_CALL_FUNCs()
+{
+        glutDisplayFunc(display);
+        glutReshapeFunc(reshape);
+        glutTimerFunc(0,timer,17);
+        glutSpecialFunc(specialkey);
+        glutSpecialUpFunc(SpecialKeyUp); //キーを離した時の処理
+        glutJoystickFunc(joyStick,10);
+}
 
 #include "TempleteUtil.h"
 
@@ -355,7 +355,10 @@ void DrawField()
     glutSolidCube(0.5);
     glPopMatrix();
  
+    //物理要素の描画
     glPushMatrix();
+    glTranslatef(5.f,0.f,0.f);
+    glScaled(0.5,0.5,0.5);
     Render();
     glPopMatrix();
     
@@ -430,5 +433,4 @@ void CheckKeyStatus()
             CurrentPos.PosX-=xr;
                 //CurrentPos.HeadAngle += 2;
         }
-}
 }

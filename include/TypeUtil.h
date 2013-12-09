@@ -12,6 +12,10 @@ namespace Types{
       typedef T pred;
       //¶À‚É‚æ‚Á‚Ä—v‘f‚ª•Ï‚í‚é
   };
+
+  struct Vec2{
+      int X;int Y;
+  };
   //template<typename T>
   //struct action{
   //    typedef std::function<void(T)> act;

@@ -1,8 +1,9 @@
 #pragma once
 #include "GL\glext.h"
-//namespace ShaderUtil{
+namespace ShaderUtil{
     void Load(GLchar* file);
-//}
+}
+
 //namespace Asset{
 
     //#include "Loadpng" http://lodev.org/lodepng/
